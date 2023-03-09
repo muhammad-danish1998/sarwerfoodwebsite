@@ -89,7 +89,7 @@ export default function RestaurantsGrid({
   return (
     <ul
       role="list"
-      className="grid grid-cols-1    gap-x-4 gap-y-6  sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-3 md:grid-cols-2 xl:gap-x-0"
+      className="grid grid-cols-1    gap-x-4 gap-y-6  sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-3 iphonerotate:grid-cols-2 md:grid-cols-2 xl:gap-x-0"
     >
       {(items || []).filter(FilterItems).map((file) => {
         const restaurantUrl = getSlugFromUrl(file.url);

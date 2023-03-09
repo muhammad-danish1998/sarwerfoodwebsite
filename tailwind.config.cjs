@@ -10,7 +10,8 @@ module.exports = {
     extend: {
       screens: {
        
-        'tablet-xl' : {'min': '1024px', 'max': '1280px'}
+        'tablet-xl' : {'min': '1024px', 'max': '1280px'},
+        'iphonerotate' : {'min': '643px', 'max': '1090px'}
       },
       colors: {
         'greenToggle': '#05FF00',

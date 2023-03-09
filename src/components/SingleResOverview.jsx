@@ -340,11 +340,12 @@ export default function SingleResOverview() {
                 menuresName={menuresName}
                 menuresdes={menuresdes}
                 menuresimg={menuresimg}
+                setShowModal = {setShowModal}
               />
             </section>
           </main>
           {/* mobile it will hidden  */}
-          <aside className=" xl:col-span-4 xl:block  tablet-xl:col-span-4 hidden   p-4  lg:mt-0 mt-8  ">
+          <aside className=" xl:col-span-4 xl:block  tablet-xl:col-span-4   p-4  lg:mt-0 mt-8  ">
             <div className="sticky top-8 space-y-4  lg:p-4 ">
               <h1 className=" lg:text-2xl text-xl  tablet-xl:mt-8  font-bold">
                 Shopping Cart
@@ -362,7 +363,7 @@ export default function SingleResOverview() {
             </div>
           </aside>
           {/* ----------  fix bottom for mobile ----------- */}
-          <div
+          {/* <div
             className="mobile-fixed-nav-top lg:hidden block "
             onClick={() => alert("dskjd")}
           >
@@ -377,7 +378,7 @@ export default function SingleResOverview() {
                 </p>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
