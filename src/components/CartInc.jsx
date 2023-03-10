@@ -24,7 +24,7 @@ const CartInc = () => {
     cartlistItem,
   } = useSelector((state) => state?.menu);
   const [val, setVal] = useState();
-  console.log("cartlist ==>", cartlist);
+  
 
   const [count, setCount] = useState(0);
   const [cartlistItemm, setCartListItemm] = useState();
@@ -36,7 +36,7 @@ const CartInc = () => {
   useEffect(() => {
     let priceVal = 0;
     cartlist?.map((es) => {
-      console.log("----", Number(es.price));
+  
       priceVal += Number(es.price);
     });
     dispatch(setItemValue(priceVal.toFixed(2)));
@@ -52,10 +52,10 @@ const CartInc = () => {
     setCartListItemm(cartlistItem);
   }, [cartlistItem]);
 
-  console.log("cartlistItemm ===>", cartlistItemm);
+  
 
   const decrementValue = (quan, code) => {
-    console.log("quan ", quan, code);
+
     if (Number(quan) > 1) {
       // setCount((count) => count - 1);
       let val = Number(quan) - 1;
@@ -66,9 +66,9 @@ const CartInc = () => {
           quantity: val,
         })
       ).then((res) => {
-        console.log("delete item", res);
+      
         if (res === 200) {
-          console.log("delete item", res);
+      
           dispatch(
             getCartMenuListItem(selectValue, localStorage.getItem("uuid"))
           );
@@ -88,7 +88,7 @@ const CartInc = () => {
             getCartMenuListItem(selectValue, localStorage.getItem("uuid"))
           );
         }
-        console.log("delete item", res);
+     
       });
     }
     // amount = totalAmount;
@@ -117,10 +117,7 @@ const CartInc = () => {
     });
     // amount = totalAmount
     amount = (Number(itemAmount) * count).toFixed(2);
-    // console.log("amount", amount)
-    // console.log("val", val);
-    // dispatch(setItemValue(amount))
-    // dispatch(setPaymentValue(val))
+ 
   };
 
   const handleUpdateNote = (code, quan) => {
@@ -133,7 +130,7 @@ const CartInc = () => {
         quantity: quan
       })
     ).then((res) => {
-      console.log("delete item", res);
+   
       if (res === 200) {
       
         dispatch(
@@ -173,9 +170,9 @@ const CartInc = () => {
                 <p>Mit Geberatene Nudeln</p>
                 <p>€21.90</p>
               </div> */}
-            <div className="card-list-uper lg:flex justify-between p-2">
+            <div className="card-list-uper flex  justify-between p-2">
               
-                <div className="lg:flex lg:w-3/5 w-full ">
+                <div className=" ipadAir:pr-4 galxyFold:pr-4 ">
                   <label
                     for="small-input"
                     class=" lg:p-2 block  lg:text-md  font-bold text-gray-500 "
@@ -190,7 +187,7 @@ const CartInc = () => {
                     onChange={(e) => handleOnChange(cart?.temp , e.target.value)}
                     class="block w-full  text-gray-900 border border-gray-300 rounded-lg bg-gray-300 sm:text-xs   "
                   />
-                  <button className="ml-2" onClick={() => handleUpdateNote(cart?.temp, cart?.quantity)}>Update</button>
+                  <button className="lg:p-2 block  lg:text-md  font-bold text-gray-500" onClick={() => handleUpdateNote(cart?.temp, cart?.quantity)}>Update</button>
                
               </div>
               <p className="flex lg:justify-center lg:mt-0 mt-2 items-center">

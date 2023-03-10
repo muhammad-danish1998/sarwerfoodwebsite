@@ -153,15 +153,15 @@ const [showDetail, setShowDetail] = useState(false);
         <div className="mx-auto max-w-8xl sm:px-6 lg:grid lg:max-w-9xl lg:grid-cols-12 lg:gap-8 lg:px-8">
           <main className="lg:col-span-9 xl:col-span-8">
             {/* -------------- card ----------------  */}
-            <section class="text-gray-600 body-font mt-4">
-              <div class="container px-5  mx-auto">
+            <section class="text-gray-600 body-font mt-0">
+              <div class="lg:container lg:px-5  mx-auto">
                 <div class="flex flex-wrap -m-4">
                   <div class=" md:w-full">
                     <div class="h-full  border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
                       <div class="p-6">
                         <div class="flex items-center flex-wrap ">
-                          <div className=" rounded-lg px-1  lg:mt-16 mb-4  w-5/6">
-                            <h1 className="text-4xl font-bold text-black mb-2">
+                          <div className=" rounded-lg px-1  lg:mt-16 mb-2  w-5/6">
+                            <h1 className="lg:text-4xl text-2xl font-bold text-black mb-2">
                               Checkout
                             </h1>
                           </div>

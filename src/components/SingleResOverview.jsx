@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
 
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -28,6 +27,7 @@ import {
   getCartMenuListItem,
 } from "../redux/store/actions/menuAction";
 import HeaderNavbarMenu from "./HeaderNavbarMenu";
+import Checkoutpopup from "./Checkputpopup";
 
 // import {
 //   getMenuList,
@@ -61,10 +61,8 @@ export default function SingleResOverview() {
     max_rest_val,
   } = useSelector((state) => state?.menu);
 
-  console.log("max_rest_val", cartlistItem?.carttotalamount >= max_rest_val);
-  // console.log("total amount", totalAmount)
-  // const { menuList, totalAmount } = useSelector((state) => state?.menu);
-  // console.log("total amount", totalAmount);
+ 
+
   const params = new URLSearchParams(window.location.search);
   useEffect(() => {
     const restaurantSlug = params.get("resturent_slug");
@@ -76,17 +74,20 @@ export default function SingleResOverview() {
         )}`
       )
       .then((response) => {
-        console.log("response", response);
+     
         setName(response?.data?.restname);
         setMenuArray(response.data.menuarr);
         setCatArray(response?.data?.catarr);
 
         setCurrentRestaurantImg(response?.data?.restlogo);
-        console.log("r-----------", response.data.menuarr);
+      
         setMenuRes(response.data.menuarr);
       });
   }, [window.location.search]);
-  const [showModal, setShowModal] = useState(false);
+   const [showModal, setShowModal] = useState(false);
+  //  ============ check out popup state ======== 
+   const [checkOutModal, setCheckOutModal] = useState(false);
+
 
   useEffect(() => {
     dispatch(getCartMenuListItem(selectValue, localStorage.getItem("uuid")));
@@ -94,9 +95,10 @@ export default function SingleResOverview() {
 
   const handleClose = () => {
     setShowModal(false);
+    setCheckOutModal(false)
   };
 
-  console.log("name", name);
+  
 
   const handleClick = (id, price, name, description, image) => {
     setShowModal(true);
@@ -111,7 +113,7 @@ export default function SingleResOverview() {
 
     setMenuResDes(description);
     setMenuResName(name);
-    console.log("value ", val);
+   
 
     if (val.length == 0) {
       dispatch(
@@ -124,6 +126,10 @@ export default function SingleResOverview() {
       );
     }
   };
+  // ============= checkout modal function ==============  
+  const checkoutModalFun = () =>{
+    setCheckOutModal(true)
+  }
   // };
   return (
     <div className="">
@@ -133,12 +139,12 @@ export default function SingleResOverview() {
       <div className="sticky-thc  ">
         <HeaderTextSlider catArray={catArray} />
       </div>
-      <div className="lg:py-0 py-1 ">
-        <div className="mx-auto max-w-9xl  sm:px-6 lg:grid  lg:grid-cols-12 lg:gap-0 lg:px-8">
-          <main className="lg:col-span-9 xl:col-span-8 tablet-xl:col-span-8  ">
+      <div className="lg:py-0 py-1  ">
+        <div className="mx-auto max-w-9xl   sm:px-6 lg:grid  lg:grid-cols-12 lg:gap-0 lg:px-8">
+          <main className="lg:col-span-9  xl:col-span-8 tablet-xl:col-span-8   ">
             {/* -------------- card ----------------  */}
-            <section className="text-gray-600  mt-4">
-              <div className="container px-5  mx-auto">
+            <section className="text-gray-600  mt-6">
+              <div className="w-5/6 lg:container lg:px-5  mx-auto">
                 <div className="flex flex-wrap -m-4">
                   <div className=" w-full">
                     <div className="h-full   border-gray-200 border-opacity-60 rounded-lg overflow-hidden">
@@ -239,10 +245,7 @@ export default function SingleResOverview() {
                         <div className="flex items-center flex-wrap ">
                           {menuArray?.map(
                             (eachMenuCatergory) => (
-                              console.log(
-                                "eachMenuCatergory ==>",
-                                eachMenuCatergory
-                              ),
+                            
                               (
                                 <>
                                   <div
@@ -340,12 +343,12 @@ export default function SingleResOverview() {
                 menuresName={menuresName}
                 menuresdes={menuresdes}
                 menuresimg={menuresimg}
-                setShowModal = {setShowModal}
+                setShowModal={setShowModal}
               />
             </section>
           </main>
           {/* mobile it will hidden  */}
-          <aside className=" xl:col-span-4 xl:block  tablet-xl:col-span-4   p-4  lg:mt-0 mt-8  ">
+          <aside className=" xl:col-span-4 xl:block hidden  tablet-xl:col-span-4   p-4  lg:mt-0 mt-8  ">
             <div className="sticky top-8 space-y-4  lg:p-4 ">
               <h1 className=" lg:text-2xl text-xl  tablet-xl:mt-8  font-bold">
                 Shopping Cart
@@ -359,27 +362,42 @@ export default function SingleResOverview() {
                   <p>€{Number(cartlistItem?.carttotalamount).toFixed(2)}</p>
                 </Link>
               )}
+              
               <CartInc />
             </div>
           </aside>
-          {/* ----------  fix bottom for mobile ----------- */}
-          {/* <div
-            className="mobile-fixed-nav-top lg:hidden block "
-            onClick={() => alert("dskjd")}
-          >
-            <ul className="mobile-fixed-nav">
-              <li>
-                <p
-                  className="checkout flex text-white  justify-between font-bold bg-redColor p-4 "
-                  to="#"
-                >
-                  <p>Checkout</p>
-                  <p>€{Number(cartlistItem?.carttotalamount).toFixed(2)}</p>
-                </p>
-              </li>
-            </ul>
-          </div> */}
         </div>
+
+        {/* ----------  fix bottom for mobile ----------- */}
+        {cartlistItem?.carttotalamount >= max_rest_val && (
+          <div className="checkout  text-white  justify-between font-bold bg-redColor p-0 rounded-2xl">
+            <div className="mobile-fixed-nav-top lg:hidden block ">
+              <ul className="mobile-fixed-nav">
+                <li>
+                  <p
+                    className="checkout flex text-white  justify-between font-bold bg-redColor p-4 "
+                    onClick={() => {
+                      checkoutModalFun();
+                    }}
+                    
+                  >
+                    <p>Go to Basket</p>
+                    <p>€{Number(cartlistItem?.carttotalamount).toFixed(2)}</p>
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+        )}
+        <Checkoutpopup
+        visible={checkOutModal}
+        setCheckOutModal={setCheckOutModal}
+        onClose={handleClose}
+        response={menures}
+        menuresName={menuresName}
+        menuresdes={menuresdes}
+        />
       </div>
     </div>
   );
