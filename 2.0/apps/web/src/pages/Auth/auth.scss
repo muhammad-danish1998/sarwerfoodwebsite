@@ -1,0 +1,35 @@
+.social-btn {
+  display: flex !important;
+  margin-top: 20px !important;
+  & > div {
+    width: 250px;
+    div {
+      &:first-child {
+        background: #fff;
+        width: 30px;
+        height: 30px;
+        padding: 5px;
+        border-radius: 8px;
+        min-width: unset !important;
+        @apply flex items-center justify-center;
+      }
+      @apply text-base font-normal;
+    }
+  }
+}
+.fb-btn {
+  & > div {
+    div {
+      &:first-child {
+        background: none !important;
+        width: 35px;
+        height: 35px;
+        margin-left: -2px;
+        svg {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    }
+  }
+}

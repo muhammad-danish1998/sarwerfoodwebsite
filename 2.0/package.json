@@ -1,0 +1,33 @@
+{
+	"name": "updatefood-2.0",
+	"version": "0.0.0",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"scripts": {
+		"server": "node build/server/index.js",
+		"build": "turbo run build",
+		"dev": "turbo run dev --parallel",
+		"start": "pnpm dev",
+		"lint": "turbo run lint",
+		"format": "prettier --write \"**/*.{ts,tsx,md}\""
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.13",
+		"eslint-config-custom": "workspace:*",
+		"postcss": "^8.4.21",
+		"prettier": "latest",
+		"prettier-plugin-tailwindcss": "^0.2.4",
+		"tailwindcss": "^3.2.7",
+		"turbo": "latest"
+	},
+	"engines": {
+		"node": ">=16.0.0",
+		"npm": "'use pnpm'",
+		"yarn": "'use pnpm'",
+		"pnpm": ">= 7.25.1"
+	},
+	"packageManager": "pnpm@7.26.0"
+}
