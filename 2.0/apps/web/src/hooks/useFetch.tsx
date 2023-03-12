@@ -90,7 +90,7 @@ export const useAxios = (config: Readonly<RequestConfig>, outSide: boolean = fal
 				requestConfig = { ...requestConfig, data: payload };
 			}
 
-			const { data: serverData } = await axios(requestConfig);
+			const { data: serverData } = await axios({ ...requestConfig });
 
 			handleSuccessRequest(serverData);
 			return serverData;

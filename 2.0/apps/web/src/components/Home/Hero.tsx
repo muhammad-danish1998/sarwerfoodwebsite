@@ -6,7 +6,9 @@ import { BsSearch } from 'react-icons/bs';
 import { CiLocationOn } from 'react-icons/ci';
 import { useNavigate } from 'react-router-dom';
 import { encodeQueryData } from '@/utils/helpers';
+import { useAppSelector } from '@/hooks';
 const Hero = () => {
+	const { address, position, zipCode } = useAppSelector((state) => state.appConfig.config);
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	return (
@@ -37,9 +39,12 @@ const Hero = () => {
 								<div className='mt-8 sm:mx-auto sm:max-w-lg sm:text-center lg:mx-0 lg:text-left'>
 									<div className=' rounded-2xl shadow-sm p-2 flex justify-center items-center w-full   bg-white border-orange-500 '>
 										<GooglePlaceAutoComplete
+											city={address!}
+											zipCode={zipCode!}
+											address={address!}
 											onSelected={({ city, zipCode }) => {
 												if (!city) return;
-												navigate(`/resturant`);
+												navigate(`/resturant?city=${city}&zipCode=${zipCode}`);
 											}}
 										/>
 									</div>

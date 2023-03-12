@@ -15,6 +15,9 @@ import { modal } from '@/components/Dialog';
 // import RatiingHeader from './RatiingHeader';
 // import RestaurantsGrid from './RestaurantsGrid';
 import { Dialog as ReactDialog } from '@headlessui/react';
+import { useAxios } from '@/hooks';
+import RestaurantsGrid from '@/components/Resturant/ResturantGrid';
+import Modalminimumorder from '@/components/Resturant/ModalminimumOrder';
 const user = {
 	name: 'Tom Cook',
 	email: 'tom@Restaurants.com',
@@ -51,40 +54,20 @@ export default function Restaurants() {
 	const handleChangeOpenResturant = () => {
 		setOpenResturant((prev) => !prev);
 	};
+	const [state, request] = useAxios({
+		url: `ajax/resturents_api_ajax.php?city=${params.get('city')}&zip=${params.get('zipCode')}&page=1`,
+	});
 
-	// const { selectValue, catId, updateSearchVal } = useSelector((state) => state?.menu);
-
-	// useEffect(() => {
-	// 	console.log('hit useEffect');
-	// 	const city = params.get('city');
-	// 	const zip = params.get('zip');
-	// 	axios
-	// 		.get(
-	// 			`https://liefermars.de/ajax/resturents_api_ajax.php?city=${city}&zip=${zip}&page=1&sessid=${localStorage.getItem(
-	// 				'uuid'
-	// 			)}&type=${selectValue}&category=${catId}`
-	// 		)
-	// 		.then((res) => {
-	// 			if (res?.data?.data) {
-	// 				setRestaurantItems(res.data.data);
-	// 				setCatArray(res.data.cat);
-	// 			}
-	// 		});
-	// }, [window.location.search, selectValue, catId, updateSearchVal]);
-
-	// useEffect(() => {
-	//   console.log("hit useEffect");
-	//   const city = params.get("city")
-	//   const zip = params.get("zip")
-	//   axios.get(`https://liefermars.de/ajax/resturents_api_ajax.php?city=${city}&zip=${zip}&page=1&sessid=${localStorage.getItem('uuid')}&type=${selectValue}&category=${catId}`).then((res) => {
-	//     console.log("🚀 ~ file: Restaurants.jsx:37 ~ Restaurants ~ res", res.data.cat)
-	//     if (res?.data?.data) {
-	//       setRestaurantItems(res.data.data);
-	//       setCatArray(res.data.cat);
-
-	//     }
-	//   })
-	// }, [updateSearchVal])
+	useEffect(() => {
+		const city = params.get('city');
+		const zip = params.get('zipCode');
+		if (!city || !zip) return;
+		request().then((res) => {
+			console.log(res);
+			setRestaurantItems(res.data);
+			setCatArray(res.cat);
+		});
+	}, [window.location.search]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showModalMinimum, setShowModalMinimum] = useState(false);
@@ -200,7 +183,7 @@ export default function Restaurants() {
 								</div>
 							</div>
 
-							{/* <Disclosure.Panel className='sm:hidden'>
+							<Disclosure.Panel className='sm:hidden'>
 								<div className='space-y-1 pt-2 pb-3'>
 									{navigation.map((item) => (
 										<Disclosure.Button
@@ -247,10 +230,11 @@ export default function Restaurants() {
 										))}
 									</div>
 								</div>
-							</Disclosure.Panel> */}
+							</Disclosure.Panel>
 						</div>
 					)}
 				</Disclosure>
+
 				<Outlet />
 			</div>
 		</>

@@ -10,25 +10,31 @@ declare const google: any;
 type TGooglePlaceAutoCompleteProps = {
 	onSelected: (args) => void;
 	hideSearchButton?: boolean;
+	zipCode: number;
+	city: string;
+	address?: string;
 };
-const GooglePlaceAutoComplete = ({ onSelected, hideSearchButton = false }: TGooglePlaceAutoCompleteProps) => {
+const GooglePlaceAutoComplete = ({
+	onSelected,
+	hideSearchButton = false,
+	address,
+	city,
+	zipCode,
+}: TGooglePlaceAutoCompleteProps) => {
 	const inputRef = useRef<any>();
-	const { address, zipCode } = useAppSelector((state) => state.appConfig.config);
 	const [state, setState] = useState<string>();
 	useEffect(() => {
-		const area = localStorage.get('area');
-		if (area) {
-			setState(area);
-			return;
-		}
-		if (!address || !zipCode) return;
-		setState(`${zipCode}, ${address}`);
-	}, [zipCode, address]);
+		if (!city || !zipCode) return;
+		setState(`${zipCode}, ${city}`);
+	}, [zipCode, city]);
 	const handlePlaceChanged = () => {
 		if (!inputRef.current) return;
 		const [place] = inputRef.current.getPlaces();
 		const city =
 			place?.address_components?.find((component) => component.types.includes('locality'))?.long_name || '';
+		const zipCode =
+			place?.address_components?.find((component) => component.types.includes('postal_code'))?.long_name ||
+			'';
 		onSelected({ city, address, zipCode });
 		localStorage.set('area', `${zipCode}, ${city}`);
 		setState(`${zipCode}, ${city}`);
