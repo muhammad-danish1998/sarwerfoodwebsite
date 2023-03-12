@@ -1,27 +1,28 @@
-import { usePosition } from '@/hooks';
+import { useAppSelector } from '@/hooks';
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import { memo, useEffect, useRef, useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { CiLocationOn } from 'react-icons/ci';
-import { useLocation } from 'react-router-dom';
 import { Input } from 'ui';
 import './home.scss';
+import { localStorage } from '@/utils/storage';
 declare const google: any;
 type TGooglePlaceAutoCompleteProps = {
 	onSelected: (args) => void;
 	hideSearchButton?: boolean;
 };
-const GooglePlaceAutoComplete = ({ onSelected, hideSearchButton = true }: TGooglePlaceAutoCompleteProps) => {
+const GooglePlaceAutoComplete = ({ onSelected, hideSearchButton = false }: TGooglePlaceAutoCompleteProps) => {
 	const inputRef = useRef<any>();
-	const { address, zipCode } = usePosition();
+	const { address, zipCode } = useAppSelector((state) => state.appConfig.config);
 	const [state, setState] = useState<string>();
-	const location = useLocation();
-	const params = new URLSearchParams(location.search);
 	useEffect(() => {
-		const c = params.get('city') || address;
-		const z = params.get('zipCode') || zipCode;
-		if (!c || !z) return;
-		setState(`${z}, ${c}`);
+		const area = localStorage.get('area');
+		if (area) {
+			setState(area);
+			return;
+		}
+		if (!address || !zipCode) return;
+		setState(`${zipCode}, ${address}`);
 	}, [zipCode, address]);
 	const handlePlaceChanged = () => {
 		if (!inputRef.current) return;
@@ -29,6 +30,8 @@ const GooglePlaceAutoComplete = ({ onSelected, hideSearchButton = true }: TGoogl
 		const city =
 			place?.address_components?.find((component) => component.types.includes('locality'))?.long_name || '';
 		onSelected({ city, address, zipCode });
+		localStorage.set('area', `${zipCode}, ${city}`);
+		setState(`${zipCode}, ${city}`);
 	};
 
 	return (
@@ -44,7 +47,7 @@ const GooglePlaceAutoComplete = ({ onSelected, hideSearchButton = true }: TGoogl
 						className='w-[calc(100%-40px)] d-block border-0 '
 					/>
 				</StandaloneSearchBox>
-				{hideSearchButton && (
+				{!hideSearchButton && (
 					<BsSearch
 						className='text-[25px] text-primary mr-5 cursor-pointer active:scale-95'
 						onClick={(e) => {

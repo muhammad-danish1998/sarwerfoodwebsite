@@ -4,7 +4,7 @@ import { usePosition as useReactPosition } from 'use-position';
 export const usePosition = () => {
 	const { latitude, longitude } = useReactPosition(false);
 	const [address, setAddress] = useState<any>();
-	const [zipCode, setZipCode] = useState<number>();
+	const [zipCode, setZipCode] = useState<number | undefined>();
 	const [, fetchAddress] = useAxios(
 		{
 			url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${

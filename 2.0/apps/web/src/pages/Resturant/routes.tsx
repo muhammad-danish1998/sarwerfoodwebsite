@@ -2,6 +2,7 @@ import About from '@/pages/Resturant/About';
 import { Checkout } from '@/pages/Resturant/Checkout';
 import Contact from '@/pages/Resturant/Contact';
 import { Delivery } from '@/pages/Resturant/Delivery';
+import Details from '@/pages/Resturant/Details';
 import { orderRoutes } from '@/pages/Resturant/Order/routes';
 import { Pickup } from '@/pages/Resturant/Pickup';
 import Privacy from '@/pages/Resturant/Privacy';
@@ -11,6 +12,10 @@ import { lazy } from 'react';
 import { Navigate, RouteObject } from 'react-router-dom';
 
 export const resturanRoutes: RouteObject[] = [
+	{
+		path: ':resturantId',
+		element: <Details />,
+	},
 	{
 		path: 'delivery',
 		element: <Delivery />,

@@ -39,7 +39,7 @@ const Hero = () => {
 										<GooglePlaceAutoComplete
 											onSelected={({ city, zipCode }) => {
 												if (!city) return;
-												navigate(`/resturant?${encodeQueryData({ city, zipCode })}`);
+												navigate(`/resturant`);
 											}}
 										/>
 									</div>
