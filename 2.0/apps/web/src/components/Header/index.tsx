@@ -32,7 +32,7 @@ export default function HeaderNavbar() {
 								</div>
 							</div>
 							<div className='flex invisible lg:visible md:visible xl:visible    flex-1 justify-center px-2 lg:ml-6 lg:justify-start'>
-								<div className='w-full  max-w-lg  lg:max-w-lg border-2 rounded-full p-1 '>
+								<div className='w-full  max-w-lg  lg:max-w-lg border-2  p-1 '>
 									<GooglePlaceAutoComplete
 										city={params.get('city')!}
 										zipCode={Number(params.get('zipCode'))!}

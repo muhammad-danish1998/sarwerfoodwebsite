@@ -18,3 +18,26 @@
     @apply text-black;
   }
 }
+
+.hot-items {
+  .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #cbe337;
+    &::after {
+      @apply text-white;
+      font-size: 20px;
+    }
+  }
+  .swiper-button-next {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #cbe337;
+    &::after {
+      font-size: 20px;
+      @apply text-white;
+    }
+  }
+}

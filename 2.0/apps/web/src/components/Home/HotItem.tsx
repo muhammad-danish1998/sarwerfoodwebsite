@@ -28,7 +28,7 @@ const HotItem = () => {
 
   return (
     <div>
-      <div className=" max-w-8xl mx-auto mt-12    mb-4  text-center lg:col-span-6">
+      <div className=" max-w-8xl mx-auto mt-12    mb-4  text-center lg:col-span-6 hot-items">
         <Swiper
           swiperProps={{
             loop: true,
@@ -55,7 +55,7 @@ const HotItem = () => {
           }}
           slides={slidesData.map((_, key) => (
             <div className="flex flex-col items-center justify-center" key={key}>
-              <img src={_.img} className="h-48 w-48" />
+              <img src={_.img} className="h-48 w-48  rounded-full border-[3px] border-[#CBE337]" />
               <p className="mt-4 text-orange-600 text-lg font-semibold">{_.title}</p>
             </div>
           ))}
