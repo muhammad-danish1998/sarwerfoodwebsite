@@ -8,7 +8,7 @@ import {
 	useImperativeHandle,
 	useState,
 } from 'react';
-type TModalRef = { show: (_child: ReactNode) => void; hide: () => void };
+type TModalRef = { show: (_child: ReactNode, deps?: any[]) => void; hide: () => void };
 export const modalRef = createRef<TModalRef>();
 export const modal = () => {
 	if (!modalRef.current) return;
@@ -17,9 +17,12 @@ export const modal = () => {
 export const Dialog = forwardRef((props, ref: ForwardedRef<TModalRef>) => {
 	const [modal, setModal] = useState(false);
 	const [child, setChild] = useState<ReactNode>();
-	const show = (_child: ReactNode) => {
+	const [deps, setDeps] = useState<any[]>([]);
+	const show = (_child: ReactNode, deps: any[] = []) => {
 		setChild(_child);
 		setModal(true);
+		console.log(deps);
+		setDeps(deps);
 	};
 	const hide = () => {
 		setModal(false);
@@ -31,7 +34,7 @@ export const Dialog = forwardRef((props, ref: ForwardedRef<TModalRef>) => {
 		show,
 		hide,
 	};
-	useImperativeHandle(ref, () => value);
+	useImperativeHandle(ref, () => value, [deps, ref]);
 	return (
 		<>
 			<Transition appear show={modal} as={Fragment}>
