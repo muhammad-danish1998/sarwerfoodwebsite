@@ -11,6 +11,7 @@ import { initConfig } from '@/redux/slice/app-config.slice';
 function App() {
 	const { address, position, zipCode } = usePosition();
 	const dispatch = useAppDispatch();
+	console.log(import.meta.env.VITE_GOOGLE_API_KEY);
 	useEffect(() => {
 		if (!address || !position || !zipCode) return;
 		console.log({ address, position, zipCode });

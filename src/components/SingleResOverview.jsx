@@ -61,7 +61,6 @@ export default function SingleResOverview() {
     max_rest_val,
   } = useSelector((state) => state?.menu);
 
- 
 
   const params = new URLSearchParams(window.location.search);
   useEffect(() => {
