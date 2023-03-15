@@ -37,7 +37,16 @@ export const Checkout = () => {
 
 	const [currentRestaurantImg, setCurrentRestaurantImg] = useState();
 	const params = new URLSearchParams(window.location.search);
-
+	const cartItem = useAppSelector((state) => state.cart.item);
+	const getTotalAmount = () => {
+		return cartItem
+			.reduce((p, c) => {
+				const price = Number(c.price);
+				if (!isNaN(price)) p += price * c.quantity;
+				return p;
+			}, 0)
+			.toFixed(2);
+	};
 	let handleSubmit = () => {
 		let data = {
 			your_street_name: localStorage.getItem('address'),
@@ -204,7 +213,7 @@ export const Checkout = () => {
 
 							<div className='checkout flex text-white justify-between bg-red-500 p-4 rounded-2xl'>
 								<p>Checkout</p>
-								<p>€{Number(cart.totalAmount)}</p>
+								<p>€{getTotalAmount()}</p>
 							</div>
 							<CartInv />
 							<div className='flex justify-between font-semibold'>
@@ -217,7 +226,7 @@ export const Checkout = () => {
 							</div>
 							<div className='flex justify-between font-semibold'>
 								<p>Total</p>
-								<p>{cart.totalAmount}</p>
+								<p>€{getTotalAmount()}</p>
 							</div>
 						</div>
 					</aside>
