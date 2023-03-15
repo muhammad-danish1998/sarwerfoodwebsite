@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 
 import { modal } from '@/components/Dialog';
-import { useMap } from 'ahooks';
+import Cart from '@/components/Resturant/Cart';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { addToCart, removeFromCart } from '@/redux/slice/cart.slice';
 import axios from 'axios';
 import HeaderTextSlider from './HeaderTextSlider';
+import CartInv from '@/components/Resturant/CartInv';
 const Details = () => {
-	const [map, { set, setAll, remove, reset, get }] = useMap<string, any>([
-		['msg', 'hello world'],
-		['123', 'number type'],
-	]);
+	const cartItem = useAppSelector((state) => state.cart.item);
+	const dispatch = useAppDispatch();
 	const [menuArray, setMenuArray] = useState<any>([]);
 	const [menures, setMenuRes] = useState([]);
 	const [menuresdes, setMenuResDes] = useState('');
@@ -44,25 +45,6 @@ const Details = () => {
 		setMenuResName(name);
 	};
 
-	const addItem = (menuItems) => {
-		setState((s) => s + 1);
-		const current = get(menuItems.id);
-		if (current) {
-			set(menuItems.id, { ...menuItems, count: current.count + 1 });
-			return;
-		}
-		set(menuItems.id, { ...menuItems, count: 1 });
-	};
-	const removeItem = (menuItems) => {
-		const current = get(menuItems.id);
-		if (current) {
-			if (current.count == 0) {
-				remove(menuItems.id);
-				return;
-			}
-			set(menuItems.id, { ...menuItems, count: current.count - 1 });
-		}
-	};
 	return (
 		<div className=''>
 			<div className='sticky-thc  '>
@@ -201,87 +183,7 @@ const Details = () => {
 
 																		<button
 																			onClick={() => {
-																				modal()?.show(
-																					<>
-																						<div>
-																							<span className='flex justify-end '>
-																								<svg
-																									xmlns='http://www.w3.org/2000/svg'
-																									fill='none'
-																									viewBox='0 0 24 24'
-																									stroke-width='1.5'
-																									stroke='currentColor'
-																									className='w-8 h-8 hover:text-red-600 cursor-pointer '>
-																									<path
-																										stroke-linecap='round'
-																										stroke-linejoin='round'
-																										d='M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z'></path>
-																								</svg>
-																							</span>
-																							<div className='mt-3  sm:mt-2'>
-																								<div className='  flex flex-col'>
-																									<p className='w-full mb-4 '></p>
-																									<h3
-																										className='lg:text-2xl  text-xl font-medium leading-6 text-gray-900'
-																										id='headlessui-dialog-title-:rc:'
-																										data-headlessui-state='open'>
-																										{eachMenuItem?.name}
-																									</h3>
-																									<h3
-																										className='text-sm  font-normal leading-6 text-gray-900'
-																										id='headlessui-dialog-title-:rd:'
-																										data-headlessui-state='open'></h3>
-																									<div className='scroll '></div>
-																								</div>
-																							</div>
-																						</div>
-																						<div className='mt-5  border-black sm:mt-6 sm:flex lg:justify-between sm:gap-3'>
-																							<div className='card-list-uper'>
-																								<p className='flex justify-center items-center'>
-																									<svg
-																										onClick={() => {
-																											removeItem(eachMenuItem);
-																										}}
-																										className='w-8 h-8 p-1 cursor-pointer  border-2 border-black rounded-full'
-																										xmlns='http://www.w3.org/2000/svg'
-																										width='24'
-																										height='24'
-																										viewBox='0 0 24 24'>
-																										<path fill='currentColor' d='M19 12.998H5v-2h14z' />
-																									</svg>
-																									<span className='m-2'>{get(eachMenuItem)?.count || 1}</span>
-																									<svg
-																										onClick={() => {
-																											console.log(map);
-																											addItem(eachMenuItem);
-																										}}
-																										xmlns='http://www.w3.org/2000/svg'
-																										fill='none'
-																										viewBox='0 0 24 24'
-																										stroke-width='1.5'
-																										stroke='currentColor'
-																										className='w-8 h-8 p-1 cursor-pointer  border-2 border-black rounded-full'>
-																										<path
-																											stroke-linecap='round'
-																											stroke-linejoin='round'
-																											d='M12 4.5v15m7.5-7.5h-15'></path>
-																									</svg>
-																								</p>
-																							</div>
-																							<button
-																								type='button'
-																								className='mt-3 bg-red-500 text-white inline-flex lg:w-2/3 w-full justify-center rounded-md border border-gray-300  px-4 py-2 text-base font-medium  shadow-sm  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 lg:text-lg sm:text-sm'>
-																								In den warenkorb legen €5.90
-																							</button>
-																						</div>
-																					</>,
-																					[map]
-																				);
-																				//   handleClick(
-																				//     eachMenuItem.id,
-																				//     eachMenuItem.price,
-																				//     eachMenuItem?.name
-																				//   );
+																				modal()?.show(<Cart menu={eachMenuItem} />);
 																			}}
 																			type='button'
 																			className='inline-flex items-center rounded-md border border-transparent  px-4 py-2 text-2xl font-bold text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'>
@@ -303,9 +205,17 @@ const Details = () => {
 					{/* mobile it will hidden  */}
 					<aside className=' xl:col-span-4 xl:block hidden  tablet-xl:col-span-4   p-4  lg:mt-0 mt-8  '>
 						<div className='sticky top-8 space-y-4  lg:p-4 '>
-							<h1 className=' lg:text-2xl text-xl  tablet-xl:mt-8  font-bold'>
-								Shopping Cart {get('186')?.count || 1}
-							</h1>
+							<h1 className=' lg:text-2xl text-xl  tablet-xl:mt-8  font-bold'>Shopping Cart</h1>
+							{/* {cartlistItem?.carttotalamount >= max_rest_val && (
+								<Link
+									className='checkout flex text-white  justify-between font-bold bg-redColor p-4 rounded-2xl'
+									to='/checkout'>
+									<p>Checkout</p>
+									<p>€{Number(cartlistItem?.carttotalamount).toFixed(2)}</p>
+								</Link>
+							)} */}
+
+							<CartInv />
 						</div>
 					</aside>
 				</div>

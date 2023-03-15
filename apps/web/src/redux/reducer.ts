@@ -1,8 +1,10 @@
 
+import cartSlice from '@/redux/slice/cart.slice';
 import { combineReducers } from '@reduxjs/toolkit';
-import appConfigReducer from './slice/app-config.slice';
+import appConfigSlice from './slice/app-config.slice';
 
 const rootReducer = combineReducers({
-  appConfig: appConfigReducer,
+  appConfig: appConfigSlice,
+  cart: cartSlice
 });
 export default rootReducer; 

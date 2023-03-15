@@ -27,6 +27,7 @@
 		"react-social-login-buttons": "^3.6.1",
 		"reactjs-social-login": "^2.6.2",
 		"redux": "^4.2.1",
+		"redux-persist": "^6.0.0",
 		"sass": "^1.58.3",
 		"ui": "workspace:*",
 		"use-position": "^1.0.0"
