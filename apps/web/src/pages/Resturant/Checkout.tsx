@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import CartInv from '@/components/Resturant/CartInv';
+import { useAppSelector } from '@/hooks';
+import { useState } from 'react';
 
 const plans = [
 	{
@@ -17,6 +19,7 @@ function classNames(...classes) {
 	return classes.filter(Boolean).join(' ');
 }
 export const Checkout = () => {
+	const cart = useAppSelector((state) => state.cart);
 	const [deliveryOption, setDeliveryOption] = useState('pickup');
 
 	const [showDetail, setShowDetail] = useState(false);
@@ -198,18 +201,23 @@ export const Checkout = () => {
 					<aside className=' xl:col-span-4 xl:block border-2 p-4 lg:p-0'>
 						<div className='sticky top-6 space-y-4 lg:p-4'>
 							<h1 className='text-2xl font-bold'>Basket</h1>
+
 							<div className='checkout flex text-white justify-between bg-red-500 p-4 rounded-2xl'>
 								<p>Checkout</p>
-								<p>€{Number('0').toFixed(2)}</p>
+								<p>€{Number(cart.totalAmount)}</p>
 							</div>
+							<CartInv />
 							<div className='flex justify-between font-semibold'>
 								<p>Subtotal</p>
+								<p>€{cart.totalAmount}</p>
 							</div>
 							<div className='flex justify-between font-semibold'>
 								<p>Delivery Costs</p>
+								<p>€{Number(cart.totalAmount)}</p>
 							</div>
 							<div className='flex justify-between font-semibold'>
 								<p>Total</p>
+								<p>{cart.totalAmount}</p>
 							</div>
 						</div>
 					</aside>

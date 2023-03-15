@@ -8,6 +8,7 @@ import axios from 'axios';
 import HeaderTextSlider from './HeaderTextSlider';
 import CartInv from '@/components/Resturant/CartInv';
 import { BsPlus } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 const Details = () => {
   const cartItem = useAppSelector((state) => state.cart.item);
   const dispatch = useAppDispatch();
@@ -211,10 +212,10 @@ const Details = () => {
               <h1 className=" lg:text-2xl text-xl  tablet-xl:mt-8  font-bold">Shopping Cart</h1>
               {/* {cartlistItem?.carttotalamount >= max_rest_val && (
 								<Link
-									className='checkout flex text-white  justify-between font-bold bg-redColor p-4 rounded-2xl'
-									to='/checkout'>
+									className='checkout flex text-white  justify-between font-bold bg-red-600 p-4 rounded-2xl'
+									to='/resturant/checkout'>
 									<p>Checkout</p>
-									<p>€{Number(cartlistItem?.carttotalamount).toFixed(2)}</p>
+									<p>€{getTotalAmount()}</p>
 								</Link>
 							)} */}
 
