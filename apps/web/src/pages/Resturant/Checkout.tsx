@@ -1,6 +1,6 @@
 import CartInv from '@/components/Resturant/CartInv';
 import { useAppSelector } from '@/hooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const plans = [
 	{
