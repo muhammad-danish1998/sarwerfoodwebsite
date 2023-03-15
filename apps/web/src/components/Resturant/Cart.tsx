@@ -8,7 +8,7 @@ import { Button } from 'ui';
 const Cart = ({ menu }) => {
 	const [{ data: menuList }, loadMenu] = useAxios({ url: `/ajax/_api_ajax_get_menu.php?menu_id=${menu.id}` });
 	const cartItem = useAppSelector((state) => state.cart.item);
-	const [map, { get, remove, reset, set }] = useMap<string, number>();
+	const [map, { get, remove, reset, set }] = useMap<string, any>();
 	const dispatch = useAppDispatch();
 	const [optionLimit, setOptionLimit] = useState(2);
 	useEffect(() => {
@@ -18,16 +18,13 @@ const Cart = ({ menu }) => {
 	const addItemToCart = (menu) => {
 		dispatch(addToCart(menu));
 	};
-
-	const getTotalAmmount = () => {
-		return cartItem
-			.reduce((p, c) => {
-				const price = Number(c.price);
-				if (!isNaN(price)) p += price * c.quantity;
-
-				return p;
-			}, 0)
-			.toFixed(2);
+	const getTotalAmmount = (id) => {
+		let total = 0;
+		const current = get(id);
+		if (!current) return total.toFixed(2);
+		const price = Number(current.price);
+		if (!isNaN(price)) total += price * current.quantity;
+		return total.toFixed(2);
 	};
 	return (
 		<>
@@ -55,7 +52,7 @@ const Cart = ({ menu }) => {
 										id='location'
 										name='location'
 										className='mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-										onChange={(e) => console.log(e)}>
+										onChange={(e) => console.log(e.target.value)}>
 										{menuList.options?.optionarr?.map((val) => (
 											<>
 												<option value={`${val.menu_id} , ${val.id}, ${val.price}`}>
@@ -78,7 +75,16 @@ const Cart = ({ menu }) => {
 											name='location'
 											className='mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
 											defaultValue='Canada'
-											onChange={(e) => console.log(e)}>
+											onChange={(e) => {
+												const [title, price] = e.target.value;
+												let current = get(menu.id);
+												if (!current) {
+													set(menu.id, { ...menu, quantity: 1 });
+													current = get(menu.id);
+												}
+												current.singleAddon = current.singleAddon || [];
+												current.singleAddon.push({ [title]: price });
+											}}>
 											{addVal.addons?.type == 'single' &&
 												addVal.addons?.opt?.map((val) => (
 													<>
@@ -99,7 +105,21 @@ const Cart = ({ menu }) => {
 																type='checkbox'
 																value={`${val0.id} , ${val0.price}`}
 																className='sr-only peer'
-																onChange={(e) => console.log(e)}
+																onChange={(e) => {
+																	const [id, price] = e.target.value;
+																	let current = get(menu.id);
+																	if (!current) {
+																		set(menu.id, { ...menu, quantity: 1, multiaddon: [{ [id]: price }] });
+																		return;
+																	}
+																	console.log(current);
+																	const m = current.multiaddon.findIndex((m) => m == id);
+																	if (m != -1) {
+																		current.multiaddon.splice(m, 1);
+																	}
+																	// current.multiaddon = current.multiaddon || [];
+																	// current.multiaddon.push({ [id]: price });
+																}}
 															/>
 															<div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
 															<span className='ml-3 text-sm font-medium text-gray-900 dark:text-gray-300'>
@@ -128,8 +148,9 @@ const Cart = ({ menu }) => {
 							onClick={() => {
 								const current = get(menu.id);
 								if (current) {
-									if (current > 1) {
-										set(menu.id, current - 1);
+									if (current.quantity != 1) {
+										current.quantity -= 1;
+										set(menu.id, { ...current });
 									}
 								}
 							}}
@@ -140,11 +161,16 @@ const Cart = ({ menu }) => {
 							viewBox='0 0 24 24'>
 							<path fill='currentColor' d='M19 12.998H5v-2h14z' />
 						</svg>
-						<span className='m-2'>{get(menu.id) || 0}</span>
+						<span className='m-2'>{get(menu.id)?.quantity || 0}</span>
 						<svg
 							onClick={() => {
 								const current = get(menu.id);
-								set(menu.id, (current || 0) + 1);
+								if (!current) {
+									set(menu.id, { ...menu, quantity: 1 });
+									return;
+								}
+								current.quantity += 1;
+								set(menu.id, { ...current });
 							}}
 							xmlns='http://www.w3.org/2000/svg'
 							fill='none'
@@ -158,12 +184,17 @@ const Cart = ({ menu }) => {
 				</div>
 				<button
 					onClick={() => {
-						addItemToCart({ ...menu, quantity: get(menu.id) });
+						let m = get(menu.id);
+						if (!m) {
+							m = menu;
+							m.quantity = 1;
+						}
+						addItemToCart({ ...m });
 						modal()?.hide();
 					}}
 					type='button'
 					className='mt-3 bg-red-500 text-white inline-flex lg:w-2/3 w-full justify-center rounded-md border border-gray-300  px-4 py-2 text-base font-medium  shadow-sm  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 lg:text-lg sm:text-sm'>
-					In den warenkorb legen €{getTotalAmmount()}
+					In den warenkorb legen €{getTotalAmmount(menu.id)}
 				</button>
 			</div>
 		</>
