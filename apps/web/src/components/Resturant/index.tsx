@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import Header from '@/components/Header';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Switch from '@/components/Resturant/Switch';
 import Rating from '@/components/Resturant/Rating';
 import { modal } from '@/components/Dialog';
@@ -43,11 +43,11 @@ function classNames(...classes) {
 export default function Restaurants() {
 	const params = new URLSearchParams(window.location.search);
 	const [restaurantItems, setRestaurantItems] = useState([]);
-	const [filterRating, setFilterRating] = useState({});
+	const [filterRating, setFilterRating] = useState<any>({});
 	const [freeDelivery, setFreeDelivery] = useState(false);
 	const [openResturant, setOpenResturant] = useState(false);
 	const [catArray, setCatArray] = useState([]);
-
+	const location = useLocation();
 	const handleChangeDelivery = () => {
 		setFreeDelivery((prev) => !prev);
 	};
@@ -55,7 +55,9 @@ export default function Restaurants() {
 		setOpenResturant((prev) => !prev);
 	};
 	const [state, request] = useAxios({
-		url: `ajax/resturents_api_ajax.php?city=${params.get('city')}&zip=${params.get('zipCode')}&page=1`,
+		url: `ajax/resturents_api_ajax.php?city=${params.get('city')}&zip=${params.get(
+			'zipCode'
+		)}&page=1&type=${openResturant}&category=${filterRating?.value || null}`,
 	});
 
 	useEffect(() => {
@@ -67,7 +69,7 @@ export default function Restaurants() {
 			setRestaurantItems(res.data);
 			setCatArray(res.cat);
 		});
-	}, [window.location.search]);
+	}, [window.location.search, openResturant, filterRating]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showModalMinimum, setShowModalMinimum] = useState(false);
@@ -97,91 +99,93 @@ export default function Restaurants() {
 					{({ open }) => (
 						<div className=''>
 							<Header />
-							<div className=' lg:visible hidden max-w-8xl  lg:ml-12   lg:mt-2 m-auto lg:flex md:flex md:flex-row items-center  p-1 '>
-								<div className='lg:flex md:flex  lg:justify-between   '>
-									{/* ================= open resturant ================  */}
-									<p className=' bg-gray-100 rounded-full p-2 flex items-center border-2  '>
-										<span className='mr-2'>Open Resturant</span>
-										<Switch handleChange={handleChangeOpenResturant} />
-									</p>
-									{/* ===================== free delivery =================  */}
-									<p className=' bg-gray-100 lg:ml-4 md:ml-1 mt-1  rounded-full p-2 flex items-center'>
-										<span className='mr-4'>{t('freedelivery')}</span>
-										<Switch handleChange={handleChangeDelivery} />
-									</p>
-								</div>
-								{/* ---------------- rating ------------  */}
-								<div className='flex lg:justify-around   mt-2 '>
-									<p className='lg:ml-4  mt-1'>
-										<Rating setShowModal={setShowModal} setFilterRating={setFilterRating} />
-									</p>
-									{/* -------------- minimum order ---------------  */}
-									<p className='ml-4  mt-1'>
-										<button
-											onClick={() => {
-												modal()?.show(
-													<>
-														<div>
-															<div className='mt-3  sm:mt-5'>
-																<ReactDialog.Title
-																	as='h3'
-																	className='text-2xl font-medium leading-6 text-gray-900'>
-																	Mininum Order
-																</ReactDialog.Title>
-																<ReactDialog.Title
-																	as='h3'
-																	className='text-sm font-normal leading-6 text-gray-900'>
-																	€ {0}
-																</ReactDialog.Title>
-																<div className='mt-2'>
-																	<p className='text-sm text-gray-500'>
-																		<div className=''>
-																			<input
-																				type='range'
-																				list='tickmarks'
-																				min='0'
-																				max='100'
-																				value={0}
-																				onChange={(e) => {}}
-																				className='w-full'
-																			/>
-																			<datalist id='tickmarks'>
-																				<option value='3'></option>
-																				<option value='3.5'></option>
-																				<option value='4'></option>
-																				<option value='4.5'></option>
-																				<option value='5'></option>
-																			</datalist>
-																		</div>
-																	</p>
+							{!location.pathname.includes('singlerestaurant') && (
+								<div className=' lg:visible hidden max-w-8xl  lg:ml-12   lg:mt-2 m-auto lg:flex md:flex md:flex-row items-center  p-1 '>
+									<div className='lg:flex md:flex  lg:justify-between   '>
+										{/* ================= open resturant ================  */}
+										<p className=' bg-gray-100 rounded-full p-2 flex items-center border-2  '>
+											<span className='mr-2'>Open Resturant</span>
+											<Switch handleChange={handleChangeOpenResturant} />
+										</p>
+										{/* ===================== free delivery =================  */}
+										<p className=' bg-gray-100 lg:ml-4 md:ml-1 mt-1  rounded-full p-2 flex items-center'>
+											<span className='mr-4'>{t('freedelivery')}</span>
+											<Switch handleChange={handleChangeDelivery} />
+										</p>
+									</div>
+									{/* ---------------- rating ------------  */}
+									<div className='flex lg:justify-around   mt-2 '>
+										<p className='lg:ml-4  mt-1'>
+											<Rating setShowModal={setShowModal} setFilterRating={setFilterRating} />
+										</p>
+										{/* -------------- minimum order ---------------  */}
+										<p className='ml-4  mt-1'>
+											<button
+												onClick={() => {
+													modal()?.show(
+														<>
+															<div>
+																<div className='mt-3  sm:mt-5'>
+																	<ReactDialog.Title
+																		as='h3'
+																		className='text-2xl font-medium leading-6 text-gray-900'>
+																		Mininum Order
+																	</ReactDialog.Title>
+																	<ReactDialog.Title
+																		as='h3'
+																		className='text-sm font-normal leading-6 text-gray-900'>
+																		€ {0}
+																	</ReactDialog.Title>
+																	<div className='mt-2'>
+																		<p className='text-sm text-gray-500'>
+																			<div className=''>
+																				<input
+																					type='range'
+																					list='tickmarks'
+																					min='0'
+																					max='100'
+																					value={0}
+																					onChange={(e) => {}}
+																					className='w-full'
+																				/>
+																				<datalist id='tickmarks'>
+																					<option value='3'></option>
+																					<option value='3.5'></option>
+																					<option value='4'></option>
+																					<option value='4.5'></option>
+																					<option value='5'></option>
+																				</datalist>
+																			</div>
+																		</p>
+																	</div>
 																</div>
 															</div>
-														</div>
-														<div className='mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3'>
-															<button
-																type='button'
-																className='inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm'
-																onClick={() => {}}>
-																View Results
-															</button>
-															<button
-																type='button'
-																className='mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm'
-																onClick={() => {
-																	modal()?.hide();
-																}}>
-																Cancel
-															</button>
-														</div>
-													</>
-												);
-											}}
-											className='border-2 p-2 rounded-full bg-gray-100'>
-											{t('minimumorder')}
-										</button>
-									</p>
+															<div className='mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3'>
+																<button
+																	type='button'
+																	className='inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm'
+																	onClick={() => {}}>
+																	View Results
+																</button>
+																<button
+																	type='button'
+																	className='mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm'
+																	onClick={() => {
+																		modal()?.hide();
+																	}}>
+																	Cancel
+																</button>
+															</div>
+														</>
+													);
+												}}
+												className='border-2 p-2 rounded-full bg-gray-100'>
+												{t('minimumorder')}
+											</button>
+										</p>
+									</div>
 								</div>
-							</div>
+							)}
 
 							<Disclosure.Panel className='sm:hidden'>
 								<div className='space-y-1 pt-2 pb-3'>
