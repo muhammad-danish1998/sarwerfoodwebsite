@@ -7,7 +7,7 @@ import { SwiperSlide } from 'swiper/react';
 import './resturant.scss';
 export default function HeaderTextSlider({ catArray, res }) {
   const [scrollHeight, setScrolHeight] = useState(0);
-
+  const [currentSelctedMenu, setCurrentselectedMenu] = useState('');
   const handleScroll = (event) => {
     let scrollTop = window.pageYOffset;
     setScrolHeight(scrollTop);
@@ -22,9 +22,14 @@ export default function HeaderTextSlider({ catArray, res }) {
       >
         <Swiper
           slides={catArray?.map((arr) => (
-            <SwiperSlide className="p-4  text-sm lg:text-md text-center  text-gray-700 cursor-pointer  ">
-              <Link to={arr.title} spy={true} smooth={true}>
-                {arr.title}
+            <SwiperSlide
+              onClick={() => setCurrentselectedMenu(arr.title)}
+              className={`p-4  text-sm lg:text-md text-center  text-gray-700 cursor-pointer `}
+            >
+              <Link to={arr.title} spy={true} smooth={true} onClick={() => setCurrentselectedMenu(arr.title)}>
+                <span className={`${currentSelctedMenu == arr.title ? 'text-primary' : ''}`}>
+                  {arr.title}
+                </span>
               </Link>
             </SwiperSlide>
           ))}
