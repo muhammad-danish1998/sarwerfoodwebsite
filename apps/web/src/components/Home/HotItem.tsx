@@ -35,6 +35,10 @@ const HotItem = () => {
             loopFillGroupWithBlank: true,
             navigation: true,
             breakpoints: {
+              0: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
               640: {
                 slidesPerView: 2,
                 spaceBetween: 20,
