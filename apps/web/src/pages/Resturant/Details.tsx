@@ -7,6 +7,7 @@ import { addToCart, removeFromCart } from '@/redux/slice/cart.slice';
 import axios from 'axios';
 import HeaderTextSlider from './HeaderTextSlider';
 import CartInv from '@/components/Resturant/CartInv';
+import { Link } from 'react-router-dom';
 const Details = () => {
 	const cartItem = useAppSelector((state) => state.cart.item);
 	const dispatch = useAppDispatch();
@@ -44,7 +45,15 @@ const Details = () => {
 		setMenuResDes(description);
 		setMenuResName(name);
 	};
-
+	const getTotalAmount = () => {
+		return cartItem
+			.reduce((p, c) => {
+				const price = Number(c.price);
+				if (!isNaN(price)) p += price * c.quantity;
+				return p;
+			}, 0)
+			.toFixed(2);
+	};
 	return (
 		<div className=''>
 			<div className='sticky-thc  '>
@@ -206,15 +215,14 @@ const Details = () => {
 					<aside className=' xl:col-span-4 xl:block hidden  tablet-xl:col-span-4   p-4  lg:mt-0 mt-8  '>
 						<div className='sticky top-8 space-y-4  lg:p-4 '>
 							<h1 className=' lg:text-2xl text-xl  tablet-xl:mt-8  font-bold'>Shopping Cart</h1>
-							{/* {cartlistItem?.carttotalamount >= max_rest_val && (
+							{cartItem.length && (
 								<Link
-									className='checkout flex text-white  justify-between font-bold bg-redColor p-4 rounded-2xl'
-									to='/checkout'>
+									className='checkout flex text-white  justify-between font-bold bg-red-600 p-4 rounded-2xl'
+									to='/resturant/checkout'>
 									<p>Checkout</p>
-									<p>€{Number(cartlistItem?.carttotalamount).toFixed(2)}</p>
+									<p>€{getTotalAmount()}</p>
 								</Link>
-							)} */}
-
+							)}
 							<CartInv />
 						</div>
 					</aside>
