@@ -6,6 +6,7 @@ import { CiLocationOn } from 'react-icons/ci';
 import { Input } from 'ui';
 import './home.scss';
 import { localStorage } from '@/utils/storage';
+import { toast } from 'react-toastify';
 declare const google: any;
 type TGooglePlaceAutoCompleteProps = {
 	onSelected: (args) => void;
@@ -23,6 +24,7 @@ const GooglePlaceAutoComplete = ({
 }: TGooglePlaceAutoCompleteProps) => {
 	const inputRef = useRef<any>();
 	const [state, setState] = useState<string>();
+
 	useEffect(() => {
 		if (!city || !zipCode) return;
 		setState(`${zipCode}, ${city}`);
@@ -57,6 +59,10 @@ const GooglePlaceAutoComplete = ({
 					<BsSearch
 						className='text-[25px] text-primary mr-5 cursor-pointer active:scale-95'
 						onClick={(e) => {
+							if (!state) {
+								toast.error(`zip code is required.`, { containerId: 'zipcode-error' });
+								return;
+							}
 							onSelected({ city: address, zipCode });
 						}}
 					/>

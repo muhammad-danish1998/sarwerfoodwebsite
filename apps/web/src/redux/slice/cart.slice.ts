@@ -5,8 +5,9 @@ const initialState: {
   item: any[],
   totalAmount: number;
   delivery_fee: string;
+  resturent_slug: string;
 
-} = { item: [], totalAmount: 0, delivery_fee: "10" };
+} = { item: [], totalAmount: 0, delivery_fee: "10", resturent_slug: '' };
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -38,6 +39,15 @@ const cartSlice = createSlice({
       const removeItem = state.item.filter((item) => item.id !== action.payload);
       state.item = removeItem;
     },
+    updateResturantSlug: (state, action) => {
+      state.resturent_slug = action.payload.resturent_slug;
+    },
+    resetCart: (state) => {
+      state.item = [];
+      state.resturent_slug = '[]';
+      state.delivery_fee = '10';
+      state.totalAmount = 0;
+    }
   },
 });
 
@@ -47,6 +57,7 @@ export const {
   incrementQuantity,
   decrementQuantity,
   removeFromCart,
-  updateCartItem
+  updateCartItem,
+  resetCart, updateResturantSlug
 } = cartSlice.actions;
 export default cartSlice.reducer;

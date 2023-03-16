@@ -20,7 +20,7 @@ export default function Rating({ setFilterRating, setShowModal }) {
 
 	const handleSelect = (e) => {
 		setSelected(e);
-		setFilterRating(e);
+		setFilterRating(e.value);
 	};
 
 	return (

@@ -1,4 +1,6 @@
+import { modal } from '@/components/Dialog';
 import CartInv from '@/components/Resturant/CartInv';
+import DeliveryDetails from '@/components/Resturant/DeliveryDetails';
 import { useAppSelector } from '@/hooks';
 import { useState } from 'react';
 
@@ -90,7 +92,9 @@ export const Checkout = () => {
 													<div className='border-2 border-gray-400 rounded-lg p-8   mt-4 mb-4 bg-white  lg:w-5/6 w-full'>
 														<div className='cursor-pointer'>
 															<label
-																onClick={() => {}}
+																onClick={() => {
+																	modal()?.show(<DeliveryDetails />);
+																}}
 																htmlFor='comment '
 																className='block text-xl cursor-pointer font-medium text-gray-700'>
 																Personal detail and adress

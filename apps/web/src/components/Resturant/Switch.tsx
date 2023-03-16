@@ -1,33 +1,30 @@
 import { Switch as HeadlessSwitch } from '@headlessui/react';
-import { useState } from 'react';
 
 function classNames(...classes) {
 	return classes.filter(Boolean).join(' ');
 }
 
-export default function Switch({ handleChange }) {
-	const [enabled, setEnabled] = useState(false);
+export default function Switch({ handleChange, value }) {
 	const enableChanges = (e) => {
-		setEnabled(e);
 		handleChange();
 	};
 	return (
 		<HeadlessSwitch
-			checked={enabled}
+			checked={value}
 			onChange={enableChanges}
 			className={classNames(
-				enabled ? 'bg-greenToggle' : 'bg-gray-200',
+				value ? 'bg-greenToggle' : 'bg-gray-200',
 				' relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
 			)}>
 			<span className='sr-only'>Use setting</span>
 			<span
 				className={classNames(
-					enabled ? 'translate-x-5' : 'translate-x-0',
+					value ? 'translate-x-5' : 'translate-x-0',
 					'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
 				)}>
 				<span
 					className={classNames(
-						enabled ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200',
+						value ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200',
 						'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
 					)}
 					aria-hidden='true'>
@@ -43,7 +40,7 @@ export default function Switch({ handleChange }) {
 				</span>
 				<span
 					className={classNames(
-						enabled ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100',
+						value ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100',
 						'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
 					)}
 					aria-hidden='true'>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { modal } from '@/components/Dialog';
 import Cart from '@/components/Resturant/Cart';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { addToCart, removeFromCart } from '@/redux/slice/cart.slice';
+import { addToCart, removeFromCart, resetCart, updateResturantSlug } from '@/redux/slice/cart.slice';
 import axios from 'axios';
 import HeaderTextSlider from './HeaderTextSlider';
 import CartInv from '@/components/Resturant/CartInv';
@@ -11,6 +11,7 @@ import { BsPlus } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 const Details = () => {
 	const cartItem = useAppSelector((state) => state.cart.item);
+	const cart = useAppSelector((state) => state.cart);
 	const dispatch = useAppDispatch();
 	const [menuArray, setMenuArray] = useState<any>([]);
 	const [menures, setMenuRes] = useState([]);
@@ -21,7 +22,14 @@ const Details = () => {
 	const [catArray, setCatArray] = useState([]);
 	const [name, setName] = useState();
 	const [currentRestaurantImg, setCurrentRestaurantImg] = useState();
-
+	useEffect(() => {
+		const restaurantSlug = params.get('resturent_slug');
+		console.log(restaurantSlug);
+		if (cart.resturent_slug != restaurantSlug) {
+			dispatch(resetCart());
+			dispatch(updateResturantSlug({ resturent_slug: restaurantSlug }));
+		}
+	}, [window.location.search]);
 	const params = new URLSearchParams(window.location.search);
 	useEffect(() => {
 		const restaurantSlug = params.get('resturent_slug');
@@ -206,19 +214,17 @@ const Details = () => {
 							</div>
 						</section>
 					</main>
-					{/* mobile it will hidden  */}
 					<aside className=' xl:col-span-4 xl:block   tablet-xl:col-span-4   p-4  lg:mt-0 mt-8  '>
 						<div className='sticky top-8 space-y-4  lg:p-4 '>
 							<h1 className=' lg:text-2xl text-xl  tablet-xl:mt-8  font-bold'>Shopping Cart</h1>
-							{cartItem.length && (
+							{cartItem.length ? (
 								<Link
 									className='checkout flex text-white  justify-between font-bold bg-red-600 p-4 rounded-2xl'
 									to='/resturant/checkout'>
 									<p>Checkout</p>
 									<p>€{getTotalAmount()}</p>
 								</Link>
-							)}
-
+							) : null}
 							<CartInv />
 						</div>
 					</aside>
