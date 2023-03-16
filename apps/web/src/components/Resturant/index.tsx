@@ -91,7 +91,10 @@ export default function Restaurants() {
 	return (
 		<>
 			<div className='min-h-full'>
-				<Outlet />
+				<div className=''>
+					<Header />
+					<Outlet />
+				</div>
 			</div>
 		</>
 	);

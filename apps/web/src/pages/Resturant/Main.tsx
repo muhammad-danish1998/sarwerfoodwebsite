@@ -95,7 +95,6 @@ const Main = () => {
 			<Disclosure as='nav' className='bg-white shadow-sm'>
 				{({ open }) => (
 					<div className=''>
-						<Header />
 						{!location.pathname.includes('singlerestaurant') && (
 							<div className=' lg:visible hidden max-w-8xl  lg:ml-12   lg:mt-2 m-auto lg:flex md:flex md:flex-row items-center  p-1 '>
 								<div className='lg:flex md:flex  lg:justify-between   '>
